@@ -1,0 +1,82 @@
+---
+  - name: Create CA 
+    hosts: pet_hosts
+    remote_user: root
+    vars:
+      server_ip: 3.70.173.12
+    tasks:
+
+ #   - name: install 
+ #     apt:
+ #       update_cache: yes
+ #       name: easy-rsa
+# "{{item}}"
+  #      state: latest
+#        with_items:
+
+    - name: Copy /etc/sysctl.conf
+      template:
+        src: templates/sysctl.conf
+        dest: /etc/sysctl.conf
+        mode: '740'
+        owner: root
+
+    - name: Copy before.rules
+      template:
+        src: templates/before.rules
+        dest: /etc/ufw/before.rules
+        mode: '740'
+        owner: root
+
+    - name: Copy /etc/sysctl.conf
+      template:
+        src: templates/ufw
+        dest: /etc/default/ufw
+        mode: '740'
+        owner: root
+
+    - name: Copy script
+      template:
+        src: templates/openvpn1.sh
+        dest: ~/
+        mode: '740'
+        owner: root
+
+    - name: Start script
+      shell: ./openvpn1.sh
+
+    - name: Copy /etc/openvpn/server/server.conf
+      template:
+        src: templates/server.conf
+        dest: /etc/openvpn/server/server.conf
+        mode: '740'
+        owner: root
+
+    - name: Enable service openVPN
+      ansible.builtin.systemd:
+        name: openvpn-server@server.service
+        enabled: yes
+        masked: no
+
+    - name: Start openVPN service
+      ansible.builtin.systemd:
+        state: started
+        name: openvpn-server@server.service
+
+    - name: Copy base.conf
+      template:
+        src: templates/base.conf
+        dest: /root/client-configs/base.conf
+        mode: '740'
+        owner: root
+
+
+    - name: Copy make_config.sh
+      template:
+        src: templates/make_config.sh
+        dest: /root/client-configs/make_config.sh
+        mode: '700'
+        owner: root
+
+    - name: Start script
+      shell: /root/client-configs/make_config.sh client1
