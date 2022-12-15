@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##Installing OpenVPN and Easy-RSA
-apt update -y
+apt update -y 
 apt install openvpn easy-rsa -y
 
 ###Creating a PKI (private key and certificate) for OpenVPN

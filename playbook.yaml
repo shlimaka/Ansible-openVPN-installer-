@@ -3,7 +3,8 @@
     hosts: pet_hosts
     remote_user: root
     vars:
-      server_ip: 3.70.173.12
+      server_ip: 18.194.60.73
+      email: vasiliimihalevich@gmail.com
     tasks:
 
  #   - name: install 
@@ -42,15 +43,15 @@
         mode: '740'
         owner: root
 
-    - name: Start script
-      shell: ./openvpn1.sh
-
     - name: Copy /etc/openvpn/server/server.conf
       template:
         src: templates/server.conf
         dest: /etc/openvpn/server/server.conf
         mode: '740'
         owner: root
+
+    - name: Start script
+      shell: ./openvpn1.sh
 
     - name: Enable service openVPN
       ansible.builtin.systemd:
@@ -80,3 +81,4 @@
 
     - name: Start script
       shell: /root/client-configs/make_config.sh client1
+

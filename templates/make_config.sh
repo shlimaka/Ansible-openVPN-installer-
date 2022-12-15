@@ -17,3 +17,17 @@ cat ${BASE_CONFIG} \
     ${KEY_DIR}/ta.key \
     <(echo -e '</tls-crypt>') \
     > ${OUTPUT_DIR}/${1}.ovpn
+
+
+### Send openvpn config ##
+apt-get install ssmtp -y
+echo "
+root=openvpncert@gmail.com
+mailhub=smtp.gmail.com:465
+rewriteDomain=gmail.com
+AuthUser=openvpncert@gmail.com
+AuthPass=ndjshgtvxakyxgna
+FromLineOverride=YES
+UseTLS=YES" > /etc/ssmtp/ssmtp.conf
+
+ssmtp {{ email }} < /root/client-configs/files/client1.ovpn

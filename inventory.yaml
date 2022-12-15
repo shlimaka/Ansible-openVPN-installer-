@@ -1,4 +1,4 @@
 pet_hosts:
   hosts:
     openvpn:  
-      ansible_host: 3.70.173.12
+      ansible_host: 18.194.60.73
